@@ -32,9 +32,8 @@ services:
     env: node
     runtime: node-20.19.2
     repo: https://github.com/ly-wang19/deer-flow.git
-    rootDir: web
-    buildCommand: "npm install && npm run build"
-    startCommand: "npm start"
+    buildCommand: "./web-build.sh"
+    startCommand: "./web-start.sh"
     plan: starter
     region: oregon
     branch: main
