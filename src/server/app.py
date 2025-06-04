@@ -241,7 +241,7 @@ async def text_to_speech(request: TTSRequest):
 async def generate_podcast(request: GeneratePodcastRequest):
     try:
         report_content = request.content
-        print(report_content)
+        # print(report_content)  # 注释掉避免干扰输出
         workflow = build_podcast_graph()
         final_state = workflow.invoke({"input": report_content})
         audio_bytes = final_state["output"]
@@ -255,7 +255,7 @@ async def generate_podcast(request: GeneratePodcastRequest):
 async def generate_ppt(request: GeneratePPTRequest):
     try:
         report_content = request.content
-        print(report_content)
+        # print(report_content)  # 注释掉避免干扰输出
         workflow = build_ppt_graph()
         final_state = workflow.invoke({"input": report_content})
         generated_file_path = final_state["generated_file_path"]

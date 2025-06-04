@@ -6,4 +6,4 @@
 BASIC_MODEL:
   base_url: https://ark.cn-beijing.volces.com/api/v3
   model: "doubao-1-5-pro-32k-250115"
-  api_key: xxxx
+  api_key: 648e609f-9ab7-4abe-836f-6ac42abf8338

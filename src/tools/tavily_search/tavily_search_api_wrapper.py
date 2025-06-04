@@ -1,4 +1,5 @@
 import json
+import urllib3
 from typing import Dict, List, Optional
 
 import aiohttp
@@ -8,6 +9,8 @@ from langchain_community.utilities.tavily_search import (
     TavilySearchAPIWrapper as OriginalTavilySearchAPIWrapper,
 )
 
+# 抑制SSL警告
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class EnhancedTavilySearchAPIWrapper(OriginalTavilySearchAPIWrapper):
     def raw_results(
@@ -38,6 +41,8 @@ class EnhancedTavilySearchAPIWrapper(OriginalTavilySearchAPIWrapper):
             # type: ignore
             f"{TAVILY_API_URL}/search",
             json=params,
+            verify=False,  # 临时跳过SSL验证
+            timeout=30
         )
         response.raise_for_status()
         return response.json()
@@ -70,7 +75,9 @@ class EnhancedTavilySearchAPIWrapper(OriginalTavilySearchAPIWrapper):
                 "include_images": include_images,
                 "include_image_descriptions": include_image_descriptions,
             }
-            async with aiohttp.ClientSession() as session:
+            # 创建禁用SSL验证的ClientSession
+            connector = aiohttp.TCPConnector(ssl=False)
+            async with aiohttp.ClientSession(connector=connector, timeout=aiohttp.ClientTimeout(total=30)) as session:
                 async with session.post(f"{TAVILY_API_URL}/search", json=params) as res:
                     if res.status == 200:
                         data = await res.text()
@@ -109,7 +116,8 @@ class EnhancedTavilySearchAPIWrapper(OriginalTavilySearchAPIWrapper):
         return clean_results
 
 
-if __name__ == "__main__":
-    wrapper = EnhancedTavilySearchAPIWrapper()
-    results = wrapper.raw_results("cute panda", include_images=True)
-    print(json.dumps(results, indent=2, ensure_ascii=False))
+# 注释掉测试代码以避免意外的print输出
+# if __name__ == "__main__":
+#     wrapper = EnhancedTavilySearchAPIWrapper()
+#     results = wrapper.raw_results("cute panda", include_images=True)
+#     print(json.dumps(results, indent=2, ensure_ascii=False))
