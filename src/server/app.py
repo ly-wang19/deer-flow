@@ -58,6 +58,12 @@ app.add_middleware(
 graph = build_graph_with_memory()
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for deployment monitoring."""
+    return {"status": "healthy", "service": "deer-flow-api", "version": "0.1.0"}
+
+
 @app.post("/api/chat/stream")
 async def chat_stream(request: ChatRequest):
     thread_id = request.thread_id

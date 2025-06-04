@@ -1,0 +1,57 @@
+services:
+  # Backend API Service
+  - type: web
+    name: deer-flow-api
+    env: python
+    repo: https://github.com/ly-wang19/deer-flow.git
+    buildCommand: "./build.sh"
+    startCommand: "./start.sh"
+    plan: starter
+    region: oregon
+    branch: main
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: PORT
+        value: "8000"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: SEARCH_API
+        value: "duckduckgo"
+      # 添加你的API密钥（在Render控制台中设置）
+      # - key: TAVILY_API_KEY
+      #   value: your-tavily-api-key
+      # - key: BRAVE_SEARCH_API_KEY
+      #   value: your-brave-search-api-key
+      # - key: OPENAI_API_KEY
+      #   value: your-openai-api-key
+    healthCheckPath: /health
+
+  # Frontend Web Service
+  - type: web
+    name: deer-flow-web
+    env: node
+    repo: https://github.com/ly-wang19/deer-flow.git
+    rootDir: web
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    plan: starter
+    region: oregon
+    branch: main
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: PORT
+        value: "3000"
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: deer-flow-api
+          property: host
+
+# Postgres database (如果需要数据库)
+# databases:
+#   - name: deer-flow-db
+#     databaseName: deer_flow
+#     user: deer_flow_user
+#     plan: starter 
