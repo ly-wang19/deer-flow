@@ -11,7 +11,7 @@ services:
     branch: main
     envVars:
       - key: PYTHON_VERSION
-        value: "3.12"
+        value: "3.12.1"
       - key: PORT
         value: "8000"
       - key: HOST
@@ -33,14 +33,14 @@ services:
     env: node
     repo: https://github.com/ly-wang19/deer-flow.git
     rootDir: web
-    buildCommand: "npm install && npm run build"
-    startCommand: "npm start"
+    buildCommand: "corepack enable && pnpm install && pnpm run build"
+    startCommand: "pnpm start"
     plan: starter
     region: oregon
     branch: main
     envVars:
       - key: NODE_VERSION
-        value: "20"
+        value: "20.19.2"
       - key: PORT
         value: "3000"
       - key: NEXT_PUBLIC_API_URL
