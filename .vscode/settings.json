@@ -37,7 +37,7 @@
     "git.autofetch": true,
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true
+        "source.organizeImports": "explicit"
     },
     "remote.SSH.remotePlatform": {
         "aliyun-deer-flow": "linux"

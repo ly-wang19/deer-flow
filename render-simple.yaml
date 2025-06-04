@@ -4,7 +4,7 @@ services:
     name: deer-flow-api-simple
     env: python
     repo: https://github.com/ly-wang19/deer-flow.git
-    buildCommand: "pip install uv && uv sync --locked && mkdir -p logs tmp && cp conf.yaml.example conf.yaml"
+    buildCommand: "./backend-build-simple.sh"
     startCommand: "uv run python server.py --host 0.0.0.0 --port 8000"
     plan: starter
     region: oregon
@@ -26,7 +26,7 @@ services:
     env: node
     repo: https://github.com/ly-wang19/deer-flow.git
     rootDir: web
-    buildCommand: "npm ci && npm run build"
+    buildCommand: "../frontend-build-simple.sh"
     startCommand: "npm start"
     plan: starter
     region: oregon
