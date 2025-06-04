@@ -1,0 +1,43 @@
+services:
+  # Backend API Service
+  - type: web
+    name: deer-flow-api-simple
+    env: python
+    repo: https://github.com/ly-wang19/deer-flow.git
+    buildCommand: "pip install uv && uv sync --locked && mkdir -p logs tmp && cp conf.yaml.example conf.yaml"
+    startCommand: "uv run python server.py --host 0.0.0.0 --port 8000"
+    plan: starter
+    region: oregon
+    branch: main
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: PORT
+        value: "8000"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: SEARCH_API
+        value: "duckduckgo"
+    healthCheckPath: /health
+
+  # Frontend Web Service  
+  - type: web
+    name: deer-flow-web-simple
+    env: node
+    repo: https://github.com/ly-wang19/deer-flow.git
+    rootDir: web
+    buildCommand: "npm ci && npm run build"
+    startCommand: "npm start"
+    plan: starter
+    region: oregon
+    branch: main
+    envVars:
+      - key: NODE_VERSION
+        value: "20.18.0"
+      - key: PORT
+        value: "3000"
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: deer-flow-api-simple
+          property: host 
