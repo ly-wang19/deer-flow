@@ -3,6 +3,7 @@ services:
   - type: web
     name: deer-flow-api
     env: python
+    runtime: python-3.12.1
     repo: https://github.com/ly-wang19/deer-flow.git
     buildCommand: "./build.sh"
     startCommand: "./start.sh"
@@ -10,8 +11,6 @@ services:
     region: oregon
     branch: main
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.12.1"
       - key: PORT
         value: "8000"
       - key: HOST
@@ -31,16 +30,15 @@ services:
   - type: web
     name: deer-flow-web
     env: node
+    runtime: node-20.19.2
     repo: https://github.com/ly-wang19/deer-flow.git
     rootDir: web
-    buildCommand: "corepack enable && pnpm install && pnpm run build"
-    startCommand: "pnpm start"
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
     plan: starter
     region: oregon
     branch: main
     envVars:
-      - key: NODE_VERSION
-        value: "20.19.2"
       - key: PORT
         value: "3000"
       - key: NEXT_PUBLIC_API_URL
