@@ -25,3 +25,35 @@ conf.yaml
 # coverage report
 coverage.xml
 coverage/
+
+# Node.js dependencies
+node_modules/
+web/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+web/.next/
+web/out/
+web/dist/
+
+# Dependencies lock files (keep package.json but ignore large lock files)
+web/package-lock.json
+web/yarn.lock
+uv.lock
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+
+# Large archives
+*.tar.gz
+*.zip
+*.tar
+*.gz
