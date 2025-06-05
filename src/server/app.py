@@ -184,7 +184,25 @@ async def _astream_workflow_generator(
 def _make_event(event_type: str, data: dict[str, any]):
     if data.get("content") == "":
         data.pop("content")
-    return f"event: {event_type}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+    try:
+        # Use separators to create more compact JSON without extra whitespace
+        json_data = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+        return f"event: {event_type}\ndata: {json_data}\n\n"
+    except (TypeError, ValueError) as e:
+        # Fallback for problematic data - convert problematic values to strings
+        logger.warning(f"JSON serialization error for event {event_type}: {e}")
+        safe_data = {}
+        for k, v in data.items():
+            try:
+                # Test if value is JSON serializable
+                json.dumps(v, ensure_ascii=False)
+                safe_data[k] = v
+            except (TypeError, ValueError):
+                # Convert problematic values to strings
+                safe_data[k] = str(v) if v is not None else None
+        
+        json_data = json.dumps(safe_data, ensure_ascii=False, separators=(',', ':'))
+        return f"event: {event_type}\ndata: {json_data}\n\n"
 
 
 @app.post("/api/tts")
